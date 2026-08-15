@@ -1,0 +1,31 @@
+# ===== Gradle =====
+.gradle/
+build/
+bin/
+out/
+
+# ===== IDE =====
+.idea/
+*.iml
+.vscode/
+.settings/
+.classpath
+.project
+
+# ===== 依赖库（不含：tacz jar 57MB 等，需自行从 TACZ 项目获取）=====
+libs/
+
+# ===== 运行时 =====
+run/
+
+# ===== 根目录冗余的 mods.toml 副本（以 src/main/resources 为准）=====
+/META-INF/
+
+# ===== 系统文件 =====
+Thumbs.db
+Desktop.ini
+*.log
+
+# ===== 本地配置（含个人路径）=====
+gradle.properties.local
+local.properties

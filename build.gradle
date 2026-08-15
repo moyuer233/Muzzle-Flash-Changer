@@ -1,0 +1,132 @@
+buildscript {
+    repositories {
+        maven { url = 'https://maven.parchmentmc.org' }
+        maven { url = 'https://maven.minecraftforge.net' }
+        maven { url = 'https://maven.aliyun.com/repository/public' }
+        maven { url = 'https://repo1.maven.org/maven2' }
+        maven { url = 'https://repo.spongepowered.org/repository/maven-public/' }
+    }
+    dependencies {
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
+        classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
+    }
+}
+
+apply plugin: 'net.minecraftforge.gradle'
+apply plugin: 'org.spongepowered.mixin'
+
+version = '1.0.0'
+group = 'com.example.muzzleflash'
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+minecraft {
+    // 使用 official 映射
+    // tacz 预编译 jar 的字节码包含 Searge 名（如 f_279569_），
+    // 而 ForgeGradle dev 环境的运行时映射只对 sourceSets.main 声明的 mod 生效，
+    // 对 run/client/mods/ 中加载的预编译 jar 不生效。
+    // 因此无论使用 official 还是 parchment，tacz 的 NoSuchFieldError 都无法避免。
+    // 解决方法：使用生产环境部署工作流（gradlew build → 复制到 mods 目录 → 启动 PCL）
+    mappings channel: 'official', version: '1.20.1'
+    runs {
+        client {
+            workingDirectory project.file('run/client')
+            property 'forge.enabledGameTestNamespaces', 'muzzleflash'
+            // 不写 mods 块：避免 sourceSets.main 被 userdev classpath + explodedTargets
+            // 双重注册，触发 java.lang.module.ResolutionException
+        }
+        server {
+            workingDirectory project.file('run/server')
+        }
+    }
+}
+
+mixin {
+    add sourceSets.main, 'mixins.refmap.json'
+    config 'mixins.muzzleflash.json'
+}
+
+dependencies {
+    minecraft "net.minecraftforge:forge:1.20.1-47.4.0"
+    // tacz: compileOnly 让 mixin import tacz 类；runtime deploy 由 deployTaczToDev 任务单独负责（避免 runtimeOnly 双重 deploy 触发 module 重名）
+    compileOnly files('libs/tacz-1.20.1.jar')
+    // MixinExtras: 嵌入 mod jar（因为 tacz 也用 @WrapOperation，但发布环境里 tacz 不会带 mixinextras）
+    implementation files('libs/mixinextras-common-0.4.1.jar')
+    implementation files('libs/mixinextras-forge-0.4.1.jar')
+    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+}
+
+jar {
+    manifest {
+        attributes([
+            'MixinConfigs': 'mixins.muzzleflash.json',
+            'MixinRefMap': 'mixins.refmap.json'
+        ])
+    }
+    // ★ 关键：让 jar 任务显式包含 mods.toml
+    // processResources 已经排除了它（避免 build/resources/main 被 explodedTargets 识别为 mod），
+    // 但最终 jar 必须有 mods.toml 才能被 Forge 加载
+    from('src/main/resources/META-INF/mods.toml') {
+        into 'META-INF'
+    }
+}
+
+// 关键：让 processResources 排除 META-INF/mods.toml
+// 这样 build/resources/main/ 不会有 mods.toml，explodedTargets 扫描 build/resources/main
+// 时找不到 modId，不会注册为 mod（避免双注册触发 java.lang.module.ResolutionException）
+processResources {
+    exclude 'META-INF/mods.toml'
+}
+
+// 显式把 libs/tacz-1.20.1.jar 复制到 run/client/mods/，让 tacz 在 dev 环境里以独立 mod 身份加载
+tasks.register('deployTaczToDev', Copy) {
+    description = 'Copy tacz jar to dev mods folder'
+    from file('libs/tacz-1.20.1.jar')
+    into "${project.layout.projectDirectory}/run/client/mods"
+    rename { 'tacz-1.20.1.jar' }  // 统一名字便于排查
+}
+
+// 显式把 muzzleflash 自己 build 的 jar 复制到 run/client/mods/，
+// 不走 mods 块声明的 userdev classpath（避免 sourceSets.main 双注册触发 module 冲突）
+tasks.register('deployMuzzleflashToDev', Copy) {
+    description = 'Build muzzleflash jar and copy to dev mods folder'
+    from tasks.named('jar').get().outputs.files
+    into "${project.layout.projectDirectory}/run/client/mods"
+}
+
+afterEvaluate {
+    tasks.matching { it.name == 'runClient' || it.name == 'runServer' }.configureEach {
+        // 因为 mods 块不写 muzzleflash，必须先 build jar 并复制到 mods/
+        dependsOn 'deployMuzzleflashToDev'
+        dependsOn 'deployTaczToDev'
+    }
+}
+
+// ============================================
+// 生产环境部署任务
+// ============================================
+def prodModsDir = 'H:\\.minecraft\\versions\\1.20.1-Forge_47.4.10\\mods'
+tasks.register('deployToProd', Copy) {
+    description = '构建并部署到生产环境 mods 目录'
+    group = 'deployment'
+    // 必须依赖 reobfJar（而非 jar）：生产环境运行时是 SRG 命名，
+    // 只跑 jar 会得到 Mojang 命名的类，导致覆写 vanilla 抽象方法时
+    // 因方法名不匹配（prepare vs m_5944_）抛 AbstractMethodError。
+    dependsOn 'reobfJar'
+    from tasks.named('jar').get().outputs.files
+    into prodModsDir
+    doLast {
+        println "=" * 50
+        println "  部署完成！"
+        println "  模组已复制到: ${prodModsDir}"
+        println "  文件名: ${tasks.named('jar').get().archiveFileName.get()}"
+        println "=" * 50
+        println "  请手动启动 PCL / Minecraft 启动器"
+        println "  选择 1.20.1-Forge_47.4.10 配置文件"
+        println "=" * 50
+    }
+}
+
+// 解决源文件中中文注释的编码问题
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}

@@ -1,0 +1,31 @@
+modLoader="javafml"
+loaderVersion="[47,)"
+license="MIT"
+[[mods]]
+modId="muzzleflash"
+version="1.0.0"
+displayName="Muzzle Flash Changer"
+authors="Moyuer233"
+description='''
+为 TACZ 添加了高度自由的枪焰动画自定义系统。
+可以全局调整枪焰的样式、时长、延迟及位置偏移和对特定武器进行独立覆写。
+'''
+[[dependencies.muzzleflash]]
+modId="forge"
+mandatory=true
+versionRange="[47,)"
+ordering="NONE"
+side="BOTH"
+[[dependencies.muzzleflash]]
+modId="minecraft"
+mandatory=true
+versionRange="[1.20.1,1.21)"
+ordering="NONE"
+side="BOTH"
+[[dependencies.muzzleflash]]
+modId="tacz"
+mandatory=true
+versionRange="[1.1.8,)"
+# AFTER：mixin 在 mod 构造期会校验 @Mixin 目标类是否可解析，tacz 必须先实例化
+ordering="AFTER"
+side="CLIENT"

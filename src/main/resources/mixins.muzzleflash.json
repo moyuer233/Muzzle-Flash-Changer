@@ -1,0 +1,13 @@
+{
+    "required": true,
+    "minVersion": "0.8",
+    "package": "com.example.muzzleflash.mixin",
+    "compatibilityLevel": "JAVA_17",
+    "refmap": "mixins.refmap.json",
+    "client": [
+        "MuzzleFlashRenderMixin"
+    ],
+    "injectors": {
+        "defaultRequire": 1
+    }
+}
