@@ -45,13 +45,24 @@ mixin {
     config 'mixins.muzzleflash.json'
 }
 
+// 依赖仓库：curse maven（tacz）、Maven Central（mixinextras，默认含 repo1）
+repositories {
+    maven {
+        name = "Curse Maven"
+        url = "https://www.cursemaven.com"
+        content {
+            includeGroup "curse.maven"
+        }
+    }
+}
+
 dependencies {
     minecraft "net.minecraftforge:forge:1.20.1-47.4.0"
-    // tacz: compileOnly 让 mixin import tacz 类；runtime deploy 由 deployTaczToDev 任务单独负责（避免 runtimeOnly 双重 deploy 触发 module 重名）
-    compileOnly files('libs/tacz-1.20.1.jar')
-    // MixinExtras: 嵌入 mod jar（因为 tacz 也用 @WrapOperation，但发布环境里 tacz 不会带 mixinextras）
-    implementation files('libs/mixinextras-common-0.4.1.jar')
-    implementation files('libs/mixinextras-forge-0.4.1.jar')
+    // tacz: compileOnly 让 mixin import tacz 类（自动从 CurseForge Maven 下载，无需手动放 libs/）
+    compileOnly fg.deobf("curse.maven:timeless-and-classics-zero-1028108:8141310")
+    // MixinExtras: 从 Maven Central 自动下载
+    implementation "io.github.llamalad7:mixinextras-common:0.4.1"
+    implementation "io.github.llamalad7:mixinextras-forge:0.4.1"
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
 
@@ -77,10 +88,10 @@ processResources {
     exclude 'META-INF/mods.toml'
 }
 
-// 显式把 libs/tacz-1.20.1.jar 复制到 run/client/mods/，让 tacz 在 dev 环境里以独立 mod 身份加载
+// 显式把 tacz jar（自动下载的依赖）复制到 run/client/mods/，让 tacz 在 dev 环境里以独立 mod 身份加载
 tasks.register('deployTaczToDev', Copy) {
     description = 'Copy tacz jar to dev mods folder'
-    from file('libs/tacz-1.20.1.jar')
+    from configurations.compileClasspath.findAll { it.name.contains('timeless-and-classics') }
     into "${project.layout.projectDirectory}/run/client/mods"
     rename { 'tacz-1.20.1.jar' }  // 统一名字便于排查
 }

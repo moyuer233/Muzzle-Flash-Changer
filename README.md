@@ -38,17 +38,14 @@ TACZ-MuzzleFlash/
 - Gradle **7.6.6**（项目自带 `gradlew`）
 - 前置 mod：[TACZ (Timeless and Classics Zero)](https://github.com/MCModderAnchor/TACZ) **1.1.8+**
 
-## 依赖准备（重要）
+## 依赖说明
 
-`libs/` 目录不随仓库上传，编译前需手动准备以下文件：
+依赖已配置为 **Gradle 构建时自动下载**，无需手动准备：
 
-| 文件 | 来源 |
-|---|---|
-| `libs/tacz-1.20.1.jar` | 从 [TACZ Releases](https://github.com/MCModderAnchor/TACZ/releases) 下载对应 1.20.1 版本的 jar，重命名为 `tacz-1.20.1.jar` |
-| `libs/mixinextras-common-0.4.1.jar` | 从 [MixinExtras](https://github.com/LlamaLad7/MixinExtras/releases) 下载 0.4.1 |
-| `libs/mixinextras-forge-0.4.1.jar` | 同上 |
+- **tacz**：从 CurseForge Maven 自动下载（`curse.maven:timeless-and-classics-zero-1028108:8141310`，对应 1.1.8-hotfix）
+- **mixinextras**：从 Maven Central 自动下载（`io.github.llamalad7:mixinextras-*:0.4.1`）
 
-创建 `libs/` 目录并放入上述文件后即可编译。
+首次构建会自动拉取这些依赖（需联网）。
 
 ## 用法
 
