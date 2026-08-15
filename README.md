@@ -32,6 +32,25 @@ TACZ-MuzzleFlash/
       pack.mcmeta
 ```
 
+## 环境要求
+
+- Minecraft **1.20.1** + Forge **47.4.x**
+- JDK **17**
+- Gradle **7.6.6**（项目自带 `gradlew`）
+- 前置 mod：[TACZ (Timeless and Classics Zero)](https://github.com/MCUmbrella/tacz) **1.1.8+**
+
+## 依赖准备（重要）
+
+`libs/` 目录不随仓库上传，编译前需手动准备以下文件：
+
+| 文件 | 来源 |
+|---|---|
+| `libs/tacz-1.20.1.jar` | 从 [TACZ Releases](https://github.com/MCUmbrella/tacz/releases) 下载对应 1.20.1 版本的 jar，重命名为 `tacz-1.20.1.jar` |
+| `libs/mixinextras-common-0.4.1.jar` | 从 [MixinExtras](https://github.com/LlamaLad7/MixinExtras/releases) 下载 0.4.1 |
+| `libs/mixinextras-forge-0.4.1.jar` | 同上 |
+
+创建 `libs/` 目录并放入上述文件后即可编译。
+
 ## 用法
 
 ### 1. 编译
