@@ -1,53 +1,32 @@
 # Muzzle Flash Changer
 
-自定义 TACZ 枪口火焰（muzzle flash）的模组：动画取代原版贴图，按枪定制 + 统一回退，通过 `GunFireEvent` 触发（与 TACZ 原版一致）。
+** 自定义 TACZ 枪口火焰的模组：动画取代原版贴图，拥有丰富的自定义配置。**
 
 ## 功能
 
 - **动画枪焰**：多帧贴图逐帧播放，取代原版单张贴图
 - **按枪定制**：可为每把枪单独配置枪焰（帧序列、时长、缩放、偏移、延迟）
 - **统一回退**：未单独配置的枪使用默认枪焰
-- **触发同步**：监听 `GunFireEvent`，真正扣扳机消耗弹药时才触发，空枪/没弹药不触发
-- **消音枪支持**：可配置指定枪完全无枪焰（`disableFlash`）
-- **发光渲染**：emissive 着色器 + 不写深度，暗处也清晰、不与枪模遮挡
 - **自动缩放**：按贴图有效内容（非透明区域）自动调整大小
 - **热重载**：支持 `/reload`（或 F3+T）重新加载配置和贴图
 
 ## 环境要求
 
 - Minecraft **1.20.1** + Forge **47.4.x**
-- JDK **17**
 - 前置 mod：[TACZ](https://github.com/MCModderAnchor/TACZ) **1.1.8+**
-
-## 依赖说明
-
-依赖已配置为 **Gradle 构建时自动下载**，无需手动准备：
-
-- **tacz**：CurseForge Maven（`curse.maven:timeless-and-classics-zero-1028108:8141310`，1.1.8-hotfix）
-- **mixinextras**：Maven Central（`io.github.llamalad7:mixinextras-*:0.4.1`）
-
-首次构建自动拉取（需联网）。
-
-## 安装与编译
-
-```
-gradlew build
-```
-
-输出：`build/libs/muzzleflash-1.0.0.jar`，放入 `mods/` 目录。
-
-首次启动会自动向 TACZ 默认枪包（`.minecraft/tacz/tacz_default_gun/`）注入 `muzzleflash_compat.json` 和枪焰贴图。修改配置后执行 `/reload` 即可生效。
 
 ## 配置详解
 
-配置文件为枪包根目录下的 **`muzzleflash_compat.json`**（本模组会自动生成默认模板）。
+- 首次启动会自动向 TACZ 默认枪包（`.minecraft/tacz/tacz_default_gun/`）注入 `muzzleflash_compat.json` 和枪焰贴图。
+- 配置文件为枪包根目录下的 **`muzzleflash_compat.json`**。
+- 每个枪包用单独的 **`muzzleflash_compat.json`**配置。
 
 ### 总开关
 
 | 字段 | 值 | 说明 |
 |---|---|---|
-| `muzzle_flash_mode` | `tmfmod` | 本模组接管枪焰渲染 |
-| | `default` | 使用原版 TACZ 枪焰（未启用本模组） |
+| `muzzle_flash_mode` | `tmfmod` | 本模组枪焰渲染 |
+| | `default` | 使用原版 TACZ 枪焰 |
 
 ### 动画字段（`defaultAnimation` 与 `guns.<gunId>` 通用）
 
@@ -62,7 +41,7 @@ gradlew build
 | `baseTextureSize` | `300` | 自动缩放的参考像素尺寸 |
 | `flashDelayMs` | `0` | 枪焰延迟启动（毫秒） |
 | `offsetX` / `offsetY` / `offsetZ` | `0` | 枪焰位置偏移（世界单位，1.0=1米；X 右、Y 上、Z 前） |
-| `disableFlash` | `false` | `true` 时该枪完全不渲染枪焰（消音枪等） |
+| `disableFlash` | `false` | `true` 时不渲染枪焰 |
 
 ### 完整示例
 
