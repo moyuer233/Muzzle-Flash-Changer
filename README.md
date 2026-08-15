@@ -93,3 +93,18 @@
 ### 怎么知道某把枪的 gunId
 
 游戏中按 **F3 + H** 打开高级提示，悬停枪械即可看到 ID；或查看枪包数据文件 `data/<namespace>/guns/<name>.json`，`<namespace>:<name>` 即为 gunId。
+
+## 指令
+
+本模组提供客户端指令（无需 OP 权限），前缀均为 `/muzzleflash`：
+
+| 指令 | 功能 |
+|---|---|
+| `/muzzleflash open` | 打开本模组内容文件夹（`.minecraft/tacz/`）路径 |
+| `/muzzleflash reload` | 重新扫描所有枪包的 `muzzleflash_compat.json` 配置并清空延迟任务 |
+| `/muzzleflash debug` | 开关调试模式。开启后输出详细日志到 `tacz/muzzleflashlog.txt`（信息类别：GUN、AMMO、TRIGGER、DELAY、ANIM、RENDER、SNAPSHOT） |
+| `/muzzleflash loginfo` | 输出状态汇总：调试状态、枪包配置数、当前持枪的子弹数 / 枪焰延迟 / tmfmod 模式 / 动画帧数 / scale / 延迟任务 / 枪焰是否活跃 |
+| `/muzzleflash delay` | 查看当前持枪的枪焰延迟状态（配置延迟、进度、剩余时间、是否活跃） |
+| `/muzzleflash delay info` | 查看当前持枪的详细延迟信息（触发时间、延迟时长、动画帧数等） |
+
+> 说明：`/muzzleflash reload` 只重新扫描本模组配置，不影响其他资源包/数据包内容。
