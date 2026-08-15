@@ -17,12 +17,6 @@ public class MuzzleFlashCommand {
         CommandDispatcher<CommandSourceStack> d = event.getDispatcher();
         d.register(
             Commands.literal("muzzleflash")
-                .then(Commands.literal("open")
-                    .executes(ctx -> {
-                        ctx.getSource().sendSystemMessage(Component.literal(
-                            "\u00a7a[MuzzleFlash] \u00a7fcontent folder: " + MuzzleFlashContent.getContentRoot()));
-                        return 1;
-                    }))
                 .then(Commands.literal("reload")
                     .executes(ctx -> {
                         GunPackCompatManager.scan();

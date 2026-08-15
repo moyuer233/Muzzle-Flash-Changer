@@ -88,6 +88,31 @@
 
 游戏中按 **F3 + H** 打开高级提示，悬停枪械即可看到 ID；或查看枪包数据文件 `data/<namespace>/guns/<name>.json`，`<namespace>:<name>` 即为 gunId。
 
+### muzzleframes 自动生成机制
+
+无需手动在 JSON 中编写帧列表。**只要把贴图放到正确目录，reload 时本模组会自动扫描并生成帧配置**：
+
+```
+.minecraft/tacz/<枪包>/assets/<namespace>/textures/muzzle/
+├── default/                  → 自动生成 defaultAnimation.defaultmuzzleflashframes
+│   ├── frame_1.png
+│   ├── frame_2.png
+│   └── ...
+└── <枪id的path部分>/          → 自动生成 guns.<namespace>:<枪id>.muzzleframes
+    ├── frame_1.png           （例如 rsh12/ → re:rsh12 的帧）
+    └── frame_2.png
+```
+
+**规则：**
+- `default/` 目录 → 生成所有枪的默认枪焰帧（`defaultAnimation.defaultmuzzleflashframes`）
+- 其它子目录名对应枪 id 的 path 部分（如 `rsh12` → `re:rsh12`）→ 自动为该枪生成 `muzzleframes`
+- 每帧自动生成：`muzzleflash:<namespace>/textures/muzzle/<目录名>/frame_<序号>`（按文件名数字排序）
+- 自动为新枪补上 `FrameDuration`（默认 50ms）
+- **自动同步**：reload 时会删除配置中已不存在的贴图帧、补充新增的贴图帧，并回写 JSON——删贴图后无需手动清理配置
+- 用 `F3 + T`、`/reload` 或模组指令 `/muzzleflash reload` 触发扫描
+
+因此定制一把枪的枪焰只需两步：① 在 `textures/muzzle/<枪id>/` 放好 `frame_N.png`；② reload 即可生效，无需手写 `muzzleframes`。
+
 ## 指令
 
 本模组提供客户端指令：
