@@ -1,4 +1,4 @@
-# Custom Muzzle Flash for TACZ
+# TACZ Custom Muzzle Flash
 
 自定义 TACZ 枪焰 mod：动画取代贴图，按枪定制+统一回退，通过 `GunFireEvent` 触发（与 TACZ 原版一致）。
 
