@@ -27,18 +27,18 @@
 | `tmfmod` | 本模组枪焰渲染 |
 | `default` | 使用原版 TACZ 枪焰 |
 
-### 动画字段（`defaultAnimation` 与 `guns.<gunId>` 通用）
+### **`muzzleflash_compat.json`** 配置
 
-| 字段 | 默认值 | 说明 |
-|---|---|---|
-| `defaultmuzzleflashframes` | `见示例` | 默认帧列表，资源路径数组（按顺序播放） |
-| `muzzleframes` | `无` | 单枪专用帧列表（配置在 `guns` 下时优先使用） |
-| `FrameDurationMs` | `50` | 动画总显示时长（毫秒） |
-| `scale` | `1.5` | 缩放倍率 |
-| `autoScale` | `true` | 按贴图有效内容自动缩放 |
-| `flashDelayMs` | `0` | 枪焰延迟启动（毫秒） |
-| `offsetX` / `offsetY` / `offsetZ` | `0` | 枪焰位置偏移（世界单位，1.0=1米；X 右、Y 上、Z 前） |
-| `disableFlash` | `false` | `true` 时不渲染枪焰 |
+| 字段 | 说明 |
+|---|---|
+| `defaultmuzzleflashframes` | 默认帧列表，资源路径数组（按顺序播放） |
+| `muzzleframes` | 单枪专用帧列表（配置在 `guns` 下时优先使用） |
+| `FrameDurationMs` | 动画总显示时长（毫秒） |
+| `scale` | 缩放倍率 |
+| `autoScale` | 按贴图有效内容自动缩放 |
+| `flashDelayMs` | 枪焰延迟启动（毫秒） |
+| `offsetX` / `offsetY` / `offsetZ` | 枪焰位置偏移（世界单位，1.0=1米；X 右、Y 上、Z 前） |
+| `disableFlash` | `true` 时不渲染枪焰 |
 
 ### 完整示例
 
