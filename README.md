@@ -103,11 +103,9 @@
     └── frame_2.png
 ```
 
-**规则：**
-- `default/` 目录 → 生成所有枪的默认枪焰帧（`defaultAnimation.defaultmuzzleflashframes`）
-- 其它子目录名对应枪 id 的 path 部分（如 `rsh12` → `re:rsh12`）→ 自动为该枪生成 `muzzleframes`
+- 其它子目录名对应枪 id 的 path 部分（如 `rsh12` 对应 `re:rsh12`）→ 自动为该枪生成 `muzzleframes` 配置
 - 每帧自动生成：`muzzleflash:<namespace>/textures/muzzle/<目录名>/frame_<序号>`（按文件名数字排序）
-- 自动为新枪补上 `FrameDuration`（默认 50ms）
+- 自动为新枪补上枪焰持续时长（默认 50ms）
 - **自动同步**：reload 时会删除配置中已不存在的贴图帧、补充新增的贴图帧，并回写 JSON——删贴图后无需手动清理配置
 - 用 `F3 + T`、`/reload` 或模组指令 `/muzzleflash reload` 触发扫描
 
