@@ -124,3 +124,11 @@
 | `/muzzleflash loginfo` | 输出状态汇总：调试状态、枪包配置数、当前持枪的子弹数 / 枪焰延迟 / tmfmod 模式 / 动画帧数 / scale / 延迟任务 / 枪焰是否活跃 |
 | `/muzzleflash delay` | 查看当前持枪的枪焰延迟状态（配置延迟、进度、剩余时间、是否活跃） |
 | `/muzzleflash delay info` | 查看当前持枪的详细延迟信息（触发时间、延迟时长、动画帧数等） |
+
+---
+
+如果觉得好用，请给个 ⭐ Star 支持一下！欢迎提交 Issue 和 Pull Request。
+
+---
+
+Agent太好用了，就是太费token了(200m)
