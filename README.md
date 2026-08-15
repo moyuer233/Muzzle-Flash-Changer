@@ -19,26 +19,23 @@
 
 - 首次启动会自动向 TACZ 默认枪包（`.minecraft/tacz/tacz_default_gun/`）注入 `muzzleflash_compat.json` 和枪焰贴图。
 - 配置文件为枪包根目录下的 **`muzzleflash_compat.json`**。
-- 每个枪包用单独的 **`muzzleflash_compat.json`**配置。
 
 ### 总开关
 
-| 字段 | 值 | 说明 |
-|---|---|---|
-| `muzzle_flash_mode` | `tmfmod` | 本模组枪焰渲染 |
-| | `default` | 使用原版 TACZ 枪焰 |
+| `muzzle_flash_mode`| 说明 |
+|---|---|
+| `tmfmod` | 本模组枪焰渲染 |
+| `default` | 使用原版 TACZ 枪焰 |
 
 ### 动画字段（`defaultAnimation` 与 `guns.<gunId>` 通用）
 
 | 字段 | 默认值 | 说明 |
 |---|---|---|
-| `defaultmuzzleflashframes` | `[]` | 默认帧列表，资源路径数组（按顺序播放） |
-| `muzzleframes` | `[]` | 单枪专用帧列表（配置在 `guns` 下时优先使用） |
-| `frameDurationMs` | `30` | 每帧停留毫秒数 |
-| `FrameDuration` | `50` | 动画总显示时长（毫秒） |
+| `defaultmuzzleflashframes` | `见示例` | 默认帧列表，资源路径数组（按顺序播放） |
+| `muzzleframes` | `无` | 单枪专用帧列表（配置在 `guns` 下时优先使用） |
+| `FrameDurationMs` | `50` | 动画总显示时长（毫秒） |
 | `scale` | `1.5` | 缩放倍率 |
-| `autoScale` | `true` | 按贴图有效内容自动缩放（大图里火焰占小区域时防止被缩小） |
-| `baseTextureSize` | `300` | 自动缩放的参考像素尺寸 |
+| `autoScale` | `true` | 按贴图有效内容自动缩放 |
 | `flashDelayMs` | `0` | 枪焰延迟启动（毫秒） |
 | `offsetX` / `offsetY` / `offsetZ` | `0` | 枪焰位置偏移（世界单位，1.0=1米；X 右、Y 上、Z 前） |
 | `disableFlash` | `false` | `true` 时不渲染枪焰 |
@@ -51,7 +48,13 @@
   "defaultAnimation": {
     "defaultmuzzleflashframes": [
       "muzzleflash:tacz/textures/muzzle/default/frame_1",
-      "muzzleflash:tacz/textures/muzzle/default/frame_2"
+      "muzzleflash:tacz/textures/muzzle/default/frame_2",
+      "muzzleflash:tacz/textures/muzzle/default/frame_3",
+      "muzzleflash:tacz/textures/muzzle/default/frame_4",
+      "muzzleflash:tacz/textures/muzzle/default/frame_5",
+      "muzzleflash:tacz/textures/muzzle/default/frame_6",
+      "muzzleflash:tacz/textures/muzzle/default/frame_7",
+      "muzzleflash:tacz/textures/muzzle/default/frame_8"
     ],
     "frameDurationMs": 30,
     "scale": 1.5,
