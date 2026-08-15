@@ -1,14 +1,13 @@
 # Custom Muzzle Flash for TACZ
 
-自定义 TACZ 枪焰 mod：动画取代贴图，按枪定制+统一回退，按"子弹是否真的射出来"触发动画。
+自定义 TACZ 枪焰 mod：动画取代贴图，按枪定制+统一回退，通过 `GunFireEvent` 触发（与 TACZ 原版一致）。
 
 ## 工作原理
 
-- Mixin 钩进 `MuzzleFlashRender.render()`，对比 `shootTimeStamp` 检测新开火
-- `shootTimeStamp` 只在 `GunFireEvent` 真正触发（即扣扳机并消耗弹药、生成子弹）时被设置，所以"未打中/没弹药"的情况不会触发动画
-- 每帧对比上次记录的 `shootTimeStamp`，变化就启动对应枪的动画
-- 我们的渲染接管后取消（`callbackInfo.cancelCallback()`）原版渲染
-- 帧动画来自配置文件，循环播放直到总时长结束
+- 监听 TACZ 的 `GunFireEvent` 开火事件触发枪焰动画（与 TACZ 原版触发逻辑一致：真正扣扳机并消耗弹药、生成子弹时才触发，未打中/没弹药不会触发）
+- Mixin 钩进 `MuzzleFlashRender.render()`，在 tmfmod 模式下取消原版枪焰渲染，改由本模组接管
+- 每帧 tick 检查动画是否到期，到期自动结束
+- 帧动画来自内置配置（按枪定制 + 统一回退），循环播放直到总时长结束
 
 ## 文件结构
 
