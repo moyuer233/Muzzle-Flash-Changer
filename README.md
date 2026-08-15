@@ -132,9 +132,3 @@
 ---
 
 Agent太好用了，就是太费token了(200m)
-
-## 许可
-
-本项目基于 **GNU GPL v3** 协议开源（与 [TACZ](https://github.com/MCModderAnchor/TACZ) 保持一致）。
-
-查看完整协议：[LICENSE](LICENSE)
