@@ -61,6 +61,8 @@ public class GunPackCompatManager {
         public float offsetZ = 0.0f;
         /** true 时该枪完全不渲染枪焰（含默认回退帧） */
         public boolean disableFlash = false;
+        /** 自动匹配原版特效大小：渲染画面尺寸以该枪 display 的 muzzle_flash.scale 为基准（仅 scale>0 生效） */
+        public boolean autoScaleFromDisplay = true;
 
         /** 用给定的帧列表和总时长构建动画。 */
         public MuzzleFlashAnimation toAnimation(String[] resolvedFrames, int resolvedDuration) {
@@ -71,7 +73,7 @@ public class GunPackCompatManager {
                 if (loc != null) list.add(loc);
             }
             if (list.isEmpty()) return null;
-            return new MuzzleFlashAnimation(list, frameDurationMs, resolvedDuration, scale, autoScale, baseTextureSize, offsetX, offsetY, offsetZ);
+            return new MuzzleFlashAnimation(list, frameDurationMs, resolvedDuration, scale, autoScale, baseTextureSize, offsetX, offsetY, offsetZ, autoScaleFromDisplay);
         }
     }
 

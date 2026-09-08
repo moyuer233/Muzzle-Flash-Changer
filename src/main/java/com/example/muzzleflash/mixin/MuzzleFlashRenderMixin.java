@@ -11,7 +11,9 @@ import com.tacz.guns.api.TimelessAPI;
 import com.tacz.guns.api.item.IGun;
 import com.tacz.guns.client.model.BedrockGunModel;
 import com.tacz.guns.client.model.functional.MuzzleFlashRender;
+import com.tacz.guns.client.resource.GunDisplayInstance;
 import com.tacz.guns.client.resource.index.ClientGunIndex;
+import com.tacz.guns.client.resource.pojo.display.gun.MuzzleFlash;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
@@ -102,17 +104,26 @@ public abstract class MuzzleFlashRenderMixin {
             MuzzleFlashManager mgr = MuzzleFlashManager.get();
             if (mgr == null) return;
 
-            // 获取当前枪械类型（用于枪型缩放）
+            // 获取枪械类型与 display muzzle_flash.scale（后者供"自动匹配原版特效大小"使用）
             String gunType = null;
+            float displayScale = 0.0f;
             try {
                 ClientGunIndex index = TimelessAPI.getClientGunIndex(gunId).orElse(null);
                 if (index != null) {
                     gunType = index.getType();
+                    GunDisplayInstance display = index.getDefaultDisplay();
+                    if (display != null) {
+                        MuzzleFlash mf = display.getMuzzleFlash();
+                        if (mf != null) {
+                            displayScale = mf.getScale();
+                        }
+                    }
                 }
             } catch (Exception e) {
                 // 忽略
             }
             mgr.setCurrentGunType(gunType);
+            mgr.setCurrentDisplayScale(displayScale);
 
             if (MuzzleFlashDebug.isEnabled()) {
                 mgr.debugSnapshot(gunId, gunType, isTmfMod);

@@ -23,6 +23,12 @@ public class MuzzleFlashManager {
     private ResourceLocation currentGunId;
     private String currentGunType = "rifle";
 
+    /**
+     * 当前渲染枪的 display 配置 muzzle_flash.scale（由渲染 mixin 每帧更新）。
+     * &gt;0 表示枪包作者按"原版特效"校准过该枪（可作为自动大小基准）；0 表示未配置/禁用。
+     */
+    private float displayScale = 0.0f;
+
     /** 主通道 RenderType 缓存（不写深度的半透明，避免遮挡枪模） */
     private final Map<ResourceLocation, RenderType> mainRenderTypeCache = new HashMap<>();
     /** 发光通道 RenderType 缓存（不写深度的叠加发光，提升亮度） */
@@ -58,6 +64,15 @@ public class MuzzleFlashManager {
         if (gunType != null && !gunType.equals(currentGunType)) {
             this.currentGunType = gunType;
         }
+    }
+
+    public void setCurrentDisplayScale(float scale) {
+        // 只接受非负值：0 = 未配置/关闭（自动大小不启用）
+        this.displayScale = Math.max(0.0f, scale);
+    }
+
+    public float getCurrentDisplayScale() {
+        return displayScale;
     }
 
     /**
@@ -198,21 +213,35 @@ public class MuzzleFlashManager {
         ResourceLocation tex = current.getFrame(frameIndex);
         if (tex == null) return;
 
-        float scale = current.scale;
+        // ===== 尺寸基准 =====
+        // 原版 TACZ SlotModel 特效（MuzzleFlashRender.doRender + SlotModel）：
+        // 16px 单面 ÷16 = 1 格宽，× s（s = 0.5 × display.scale）→ 画面总宽 = 0.5 × display.scale 格，
+        // 画面中心就在枪口骨骼点（bone pos、面中心与 translate(0,-1,0) 相互抵消）。
+        // 因此当枪包 display 配了 muzzle_flash.scale > 0 且开启 autoScaleFromDisplay 时，
+        // 让自定义贴图画面与原版特效同尺寸——枪包作者按原版特效校准过的枪会自动贴合枪口。
+        float ds = displayScale;
+        boolean matchDisplay = ds > 0 && current.autoScaleFromDisplay;
 
-        // 1. 自动缩放：根据贴图有效内容（非透明像素包围盒）尺寸，
-        //    把火焰有效内容归一化到 baseTextureSize 对应的物理大小，
-        //    避免大贴图里火焰只占一小部分时被错误缩小。
-        if (current.autoScale) {
-            int effDim = MuzzleFlashContent.getEffectiveMaxDimension(tex);
-            if (effDim > 0) {
-                float autoScaleFactor = (float) current.baseTextureSize / effDim;
-                scale *= autoScaleFactor;
+        float scale = 1.0f;
+        float half;
+        if (matchDisplay) {
+            // 画面总宽 0.5*ds，与原版 SlotModel 单面一致（half = 0.25*ds）
+            half = 0.25f * ds;
+            // 不再叠加配置 scale / autoScale / 枪型系数，否则双重缩放
+        } else {
+            half = 0.5f;
+            scale = current.scale;
+            // 1. 自动缩放：按贴图有效内容（非透明像素包围盒）归一化，
+            //    避免大贴图里火焰只占一小部分时被错误缩小。
+            if (current.autoScale) {
+                int effDim = MuzzleFlashContent.getEffectiveMaxDimension(tex);
+                if (effDim > 0) {
+                    scale *= (float) current.baseTextureSize / effDim;
+                }
             }
+            // 2. 枪类型缩放
+            scale *= getScaleForGunType(currentGunType);
         }
-
-        // 2. 枪类型缩放
-        scale *= getScaleForGunType(currentGunType);
 
         // 3. 动画帧衰减：后 30% 帧线性衰减到完全透明
         float frameProgress = (float) (frameIndex + 1) / current.frames.size();
@@ -227,8 +256,8 @@ public class MuzzleFlashManager {
         // 调试：每 5 帧记录一次渲染
         if (MuzzleFlashDebug.isEnabled() && frameIndex % 5 == 0) {
             MuzzleFlashDebug.logAnimation("render", currentGunId, frameIndex, alpha, current.frames.size());
-            MuzzleFlashDebug.log("RENDER", String.format("tex=%s, scale=%.3f, light=%d, overlay=%d, alpha=%.2f",
-                    tex, scale, light, overlay, alpha));
+            MuzzleFlashDebug.log("RENDER", String.format("tex=%s, matchDisplay=%s, ds=%.2f, half=%.3f, scale=%.3f, light=%d, overlay=%d, alpha=%.2f",
+                    tex, matchDisplay, ds, half, scale, light, overlay, alpha));
         }
 
         // 必须使用我们自己的 BufferSource + RenderType（不能复用 mixin 传入的 VertexConsumer，
@@ -267,7 +296,6 @@ public class MuzzleFlashManager {
             // 发光通道用略低的 alpha，避免叠加后过曝成金黄
             int glowAlphaInt = (int) (alpha * 0.6f * 255);
 
-            float half = 0.5f;
             int overlayVal = overlay;  // 使用方法参数 overlay
             // 关键：枪焰是自发光，必须强制最大光照！
             // mixin 传入的 light 是枪口骨骼的场景光照，阴影/暗处会很低（个位数）。

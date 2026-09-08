@@ -33,6 +33,7 @@
 | `flashDelayMs` | 枪焰延迟启动（毫秒），**仅 `guns` 下生效**（`defaultAnimation` 中的该字段无效） |
 | `offsetX` / `offsetY` / `offsetZ` | 枪焰位置偏移（世界单位，1.0=1米；X 右、Y 上、Z 前） |
 | `disableFlash` | `true` 时不渲染枪焰（含回退帧）；放在 `defaultAnimation` 可整包禁用 |
+| `autoScaleFromDisplay` | 自动匹配原版特效大小，见下方"自动匹配原版特效" |
 
 ### 完整示例
 
@@ -77,6 +78,17 @@
 - `defaultAnimation`：所有未单独配置的枪使用
 - `guns.<gunId>`：覆盖指定枪（`<命名空间>:<枪id>`，如 `tacz:ak47`、`re:rsh12`）
 - **枪型缩放系数**：最终渲染缩放 = `scale` × 枪型系数。枪型由 TACZ 枪数据的 `type` 决定：pistol=0.7、smg=0.85、rifle=1.0、shotgun=1.3、sniper=1.4、grenade=1.5、special=1.1、melee=0.5（未知枪型按 1.0）。想让某把枪的最终大小完全等于 `scale`，可把 `scale` 设为 `期望值 ÷ 枪型系数`。
+
+### 自动匹配原版特效（第三方枪包位置/大小适配）
+
+TACZ 原版枪口特效是挂在枪模 `muzzle_flash` 骨骼上的一个 16px 画面（`SlotModel`），画面中心就是骨骼点，总宽 = `0.5 × display.muzzle_flash.scale` 格。枪包作者（尤其是第三方枪包）在建模时就是按"原版特效落在枪口的样子"来摆放该骨骼、逐枪调 `muzzle_flash.scale` 的。
+
+本模组渲染时（默认 `autoScaleFromDisplay: true`）：
+- **尺寸**：画面总宽直接取 `0.5 × display.muzzle_flash.scale` 格，与原版特效 1:1 一致，不再叠加 `scale × 枪型系数`（避免双重缩放）——所以第三方枪包上火焰会自动贴合枪口、大小与原版相同，无需逐枪手调；
+- **位置**：画面中心即枪口骨骼点，与原版特效同锚点（`offsetX/Y/Z` 仍可用作额外微调）；
+- 当某枪 `display` 里没写 `muzzle_flash`、或 `scale ≤ 0`（如枪包作者用 0 关闭了原版特效）时，自动匹配不生效，回退到 `scale × 枪型系数` 体系（`autoScale` 同样生效）。
+
+想让某把枪恢复旧的"自定义大小"渲染，把该枪（或 `defaultAnimation`）的 `autoScaleFromDisplay` 设为 `false` 即可。
 
 ### 帧资源路径
 

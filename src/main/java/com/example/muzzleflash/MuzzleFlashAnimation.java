@@ -23,8 +23,18 @@ public class MuzzleFlashAnimation {
     public final float offsetX;
     public final float offsetY;
     public final float offsetZ;
+    /**
+     * 自动匹配原版特效大小：以该枪 display 配置的 muzzle_flash.scale 为基准，
+     * 使渲染画面尺寸 = 原版 SlotModel 特效（画面总宽 0.5*scale 格，中心即枪口骨骼点）。
+     * 仅当该枪 display.scale > 0 时生效；scale=0 或未配置的枪回退到 scale×枪型系数体系。
+     */
+    public final boolean autoScaleFromDisplay;
 
     public MuzzleFlashAnimation(List<ResourceLocation> frames, int frameDurationMs, int totalDurationMs, float scale, boolean autoScale, int baseTextureSize, float offsetX, float offsetY, float offsetZ) {
+        this(frames, frameDurationMs, totalDurationMs, scale, autoScale, baseTextureSize, offsetX, offsetY, offsetZ, true);
+    }
+
+    public MuzzleFlashAnimation(List<ResourceLocation> frames, int frameDurationMs, int totalDurationMs, float scale, boolean autoScale, int baseTextureSize, float offsetX, float offsetY, float offsetZ, boolean autoScaleFromDisplay) {
         this.frames = frames;
         this.frameDurationMs = Math.max(1, frameDurationMs);
         this.totalDurationMs = Math.max(0, totalDurationMs);
@@ -34,6 +44,7 @@ public class MuzzleFlashAnimation {
         this.offsetX = offsetX;
         this.offsetY = offsetY;
         this.offsetZ = offsetZ;
+        this.autoScaleFromDisplay = autoScaleFromDisplay;
     }
 
     public int getTotalDurationMs() {
