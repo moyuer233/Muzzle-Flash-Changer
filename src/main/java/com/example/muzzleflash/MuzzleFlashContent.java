@@ -185,6 +185,13 @@ public class MuzzleFlashContent {
         // 扫描枪包配置（包含自动生成 frames）
         GunPackCompatManager.scan();
 
+        // 配置已重载：旧的进行中动画/延迟任务引用的配置可能已变化，全部作废
+        FireDelayManager.clearAll();
+        MuzzleFlashManager mgr = MuzzleFlashManager.get();
+        if (mgr != null) {
+            mgr.reset();
+        }
+
         MuzzleFlashMod.LOGGER.info("[MuzzleFlash] reload: {} textures registered, {} tmfmod namespaces, {} configs",
                 count, GunPackCompatManager.getCacheSize(), GunPackCompatManager.getConfigCount());
 

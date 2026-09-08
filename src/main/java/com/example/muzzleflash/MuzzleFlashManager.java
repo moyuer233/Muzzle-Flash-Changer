@@ -61,21 +61,22 @@ public class MuzzleFlashManager {
     }
 
     /**
-     * 触发枪焰动画（由 ammo 变化检测调用）。
+     * 触发枪焰动画（由开火事件调用）。
      * 如果该枪配置了 flashDelayMs，则延迟启动动画。
      */
     public void triggerAnimation(ResourceLocation gunId) {
         if (gunId == null) return;
 
+        // disableFlash: true 的枪完全不渲染枪焰（含默认回退帧）
+        if (GunPackCompatManager.isFlashDisabled(gunId)) {
+            FireDelayManager.cancelPending(gunId);
+            MuzzleFlashDebug.log("TRIGGER", String.format("skip: gun=%s flash disabled by config", gunId));
+            return;
+        }
+
         if (current != null && gunId.equals(currentGunId)) {
             long elapsed = System.currentTimeMillis() - startTimeMs;
             if (elapsed < 50) return; // 防重复
-        }
-
-        // 如果该枪有等待中的延迟任务，跳过本次触发
-        if (FireDelayManager.hasPending(gunId)) {
-            MuzzleFlashDebug.log("TRIGGER", String.format("skip: gun=%s already has pending delay", gunId));
-            return;
         }
 
         MuzzleFlashAnimation anim = GunPackCompatManager.getAnimationForGun(gunId);
@@ -87,7 +88,7 @@ public class MuzzleFlashManager {
 
         // 检查是否需要延迟启动
         if (FireDelayManager.requestDelayedFlash(gunId, anim)) {
-            currentGunId = gunId;  // 保存 gunId 供 tick() 检查
+            currentGunId = gunId;  // 排队中：等 tick() 消费就绪任务
             int delayMs = GunPackCompatManager.getFlashDelayForGun(gunId);
             MuzzleFlashDebug.logDelay("queued", gunId, delayMs, delayMs);
             return;
@@ -102,24 +103,21 @@ public class MuzzleFlashManager {
     }
 
     /**
-     * 每帧检查：延迟任务是否就绪、动画是否到期。
+     * 每帧检查（无枪上下文，仅清理过期动画）。
+     * 延迟任务的消费/回收由 {@link #tick(ResourceLocation)}（渲染路径，带当前枪）驱动。
      */
     public void tick() {
-        // 检查延迟任务是否就绪
-        if (current == null && currentGunId != null) {
-            // 找一个已就绪的延迟任务启动
-            // 这里简化处理：检查当前枪是否有就绪的延迟任务
-            if (currentGunId != null) {
-                FireDelayManager.PendingFlash pending = FireDelayManager.consumeReadyFlash(currentGunId);
-                if (pending != null) {
-                    current = pending.animation;
-                    startTimeMs = System.currentTimeMillis();
-                    MuzzleFlashDebug.logAnimation("delayed-started", currentGunId, 0, 1.0f,
-                            current != null ? current.frames.size() : 0);
-                }
-            }
-        }
+        tick(null);
+    }
 
+    /**
+     * 渲染路径每帧调用：清理过期动画、回收切枪遗留的孤儿延迟任务，
+     * 并消费当前枪已就绪的延迟任务。
+     *
+     * @param activeGunId 当前正在渲染的枪 id（无渲染上下文时传 null）
+     */
+    public void tick(ResourceLocation activeGunId) {
+        // 1. 清理过期动画
         if (current != null) {
             long elapsed = System.currentTimeMillis() - startTimeMs;
             if (elapsed > current.getTotalDurationMs()) {
@@ -130,6 +128,30 @@ public class MuzzleFlashManager {
                 currentGunId = null;
             }
         }
+
+        // 2. 有明确渲染上下文时：回收其它枪的孤儿延迟任务
+        if (activeGunId == null) return;
+        FireDelayManager.cancelForeign(activeGunId);
+
+        // 3. 无动画播放时，消费当前枪已就绪的延迟任务
+        if (current == null) {
+            FireDelayManager.PendingFlash pending = FireDelayManager.consumeReadyFlash(activeGunId);
+            if (pending != null) {
+                current = pending.animation;
+                startTimeMs = System.currentTimeMillis();
+                MuzzleFlashDebug.logAnimation("delayed-started", activeGunId, 0, 1.0f,
+                        current != null ? current.frames.size() : 0);
+            }
+        }
+    }
+
+    /**
+     * 清空当前动画状态（reload 时调用，防止旧动画/旧延迟在重载后继续）。
+     */
+    public void reset() {
+        current = null;
+        startTimeMs = -1;
+        currentGunId = null;
     }
 
     public boolean isActive() {

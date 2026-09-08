@@ -119,13 +119,6 @@ public class MuzzleFlashDebug {
     }
 
     /**
-     * 输出枪械信息快照
-     */
-    public static void logGunInfo(String event, ResourceLocation gunId, int ammoCount, String gunType) {
-        log("GUN", String.format("%s: id=%s, ammo=%d, type=%s", event, gunId, ammoCount, gunType));
-    }
-
-    /**
      * 输出动画状态快照
      */
     public static void logAnimation(String event, ResourceLocation gunId, int frameIndex, float alpha, int totalFrames) {

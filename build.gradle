@@ -60,9 +60,6 @@ dependencies {
     minecraft "net.minecraftforge:forge:1.20.1-47.4.0"
     // tacz: compileOnly 让 mixin import tacz 类（自动从 CurseForge Maven 下载，无需手动放 libs/）
     compileOnly fg.deobf("curse.maven:timeless-and-classics-zero-1028108:8141310")
-    // MixinExtras: 从 Maven Central 自动下载
-    implementation "io.github.llamalad7:mixinextras-common:0.4.1"
-    implementation "io.github.llamalad7:mixinextras-forge:0.4.1"
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
 

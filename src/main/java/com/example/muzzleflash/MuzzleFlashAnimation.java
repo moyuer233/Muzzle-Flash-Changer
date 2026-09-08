@@ -24,10 +24,6 @@ public class MuzzleFlashAnimation {
     public final float offsetY;
     public final float offsetZ;
 
-    public MuzzleFlashAnimation(List<ResourceLocation> frames, int frameDurationMs, int totalDurationMs, float scale, boolean autoScale, int baseTextureSize) {
-        this(frames, frameDurationMs, totalDurationMs, scale, autoScale, baseTextureSize, 0.0f, 0.0f, 0.0f);
-    }
-
     public MuzzleFlashAnimation(List<ResourceLocation> frames, int frameDurationMs, int totalDurationMs, float scale, boolean autoScale, int baseTextureSize, float offsetX, float offsetY, float offsetZ) {
         this.frames = frames;
         this.frameDurationMs = Math.max(1, frameDurationMs);

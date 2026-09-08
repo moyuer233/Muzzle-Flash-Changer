@@ -69,10 +69,17 @@ public class FireDelayManager {
         int delayMs = GunPackCompatManager.getFlashDelayForGun(gunId);
         if (delayMs <= 0) return false;
 
-        // 关键修复：仅当没有 pending 时创建新任务，避免重置 triggerTimeMs
-        // 否则持续按开火键会导致延迟永远不结束
-        if (pendingFlashes.containsKey(gunId)) {
-            return true;  // 已存在 pending，保持原 triggerTimeMs
+        // 已存在 pending 时：
+        // - 未就绪（延迟仍在走）：保持原 triggerTimeMs 不重置（防连发把延迟无限往后推）；
+        // - 已就绪（延迟早已结束但没被消费，例如期间切枪/收枪导致渲染断档）：
+        //   视为过期孤儿任务，作废重排，避免该枪后续开火被永久吞掉。
+        PendingFlash existing = pendingFlashes.get(gunId);
+        if (existing != null) {
+            if (existing.isReady()) {
+                pendingFlashes.remove(gunId);
+            } else {
+                return true;
+            }
         }
 
         // 创建新的延迟任务
@@ -124,10 +131,16 @@ public class FireDelayManager {
     }
 
     /**
-     * 检查指定枪是否有等待中的延迟任务。
+     * 回收不属于当前渲染枪的孤儿延迟任务（切枪后旧枪的 pending 无人消费，
+     * 会一直卡住该枪后续开火，必须清理）。
      */
-    public static boolean hasPending(ResourceLocation gunId) {
-        if (gunId == null) return false;
-        return pendingFlashes.containsKey(gunId);
+    public static void cancelForeign(ResourceLocation keepGunId) {
+        if (keepGunId == null) return;
+        if (pendingFlashes.isEmpty()) return;
+        pendingFlashes.entrySet().removeIf(entry -> {
+            if (entry.getKey().equals(keepGunId)) return false;
+            MuzzleFlashDebug.logDelay("cancel-foreign", entry.getKey(), entry.getValue().delayMs, 0);
+            return true;
+        });
     }
 }

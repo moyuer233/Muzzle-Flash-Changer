@@ -1,5 +1,6 @@
 package com.example.muzzleflash.mixin;
 
+import com.example.muzzleflash.FireDelayManager;
 import com.example.muzzleflash.GunPackCompatManager;
 import com.example.muzzleflash.MuzzleFlashDebug;
 import com.example.muzzleflash.MuzzleFlashManager;
@@ -34,6 +35,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
  *    且独立 BufferSource 的 flush 时机与枪模不同，产生深度/混合错位 → 金色残留。
  *
  * 我们的策略（模仿原版 delegateRender）：
+ * - 只有"本地玩家"的枪渲染（isSelf == true）才接管：原版靠 isSelf 区分本地/第三方，
+ *   第三方枪（isSelf == false）原版本来就不渲染枪焰，我们也必须直接放行，
+ *   否则会用本地玩家的动画去污染第三方枪口、并误杀本地延迟任务。
  * - render() HEAD：ci.cancel() 取消原版，捕获当前枪口矩阵（每帧更新，避免原版
  *   muzzleFlashPose 只在开火后第一帧更新的位置偏差），再 delegateRender 延迟渲染。
  * - 延迟回调里用捕获的矩阵重建 PoseStack，交给 MuzzleFlashManager 渲染枪焰。
@@ -48,12 +52,13 @@ public abstract class MuzzleFlashRenderMixin {
     @Inject(method = "render", at = @At("HEAD"), cancellable = true, remap = false)
     private void muzzleflash$onRender(PoseStack poseStack, VertexConsumer vertexBuffer, ItemDisplayContext transformType, int light, int overlay, CallbackInfo ci) {
         try {
-            MuzzleFlashManager mgr = MuzzleFlashManager.get();
-            if (mgr == null) return;
+            // 非本地玩家渲染：原版 isSelf=false 时本来就 return 不画枪焰，
+            // 我们同样直接放行，不接管、不 cancel、不动延迟任务。
+            if (!MuzzleFlashRender.isSelf) {
+                return;
+            }
 
-            // 获取当前枪械信息
             ResourceLocation gunId = null;
-            String gunType = null;
             try {
                 if (bedrockGunModel != null) {
                     ItemStack currentGunItem = bedrockGunModel.getCurrentGunItem();
@@ -61,20 +66,19 @@ public abstract class MuzzleFlashRenderMixin {
                         IGun iGun = IGun.getIGunOrNull(currentGunItem);
                         if (iGun != null) {
                             gunId = iGun.getGunId(currentGunItem);
-
-                            if (gunId != null) {
-                                ClientGunIndex index = TimelessAPI.getClientGunIndex(gunId).orElse(null);
-                                if (index != null) {
-                                    gunType = index.getType();
-                                    mgr.setCurrentGunType(gunType);
-                                }
-                            }
                         }
                     }
                 }
             } catch (Exception e) {
                 // 忽略
             }
+            if (gunId == null) {
+                return;
+            }
+
+            // 只要本地渲染上下文明确是别的枪，就回收切枪遗留的孤儿延迟任务
+            // （避免旧枪 pending 卡死其后续开火）。无论该枪是否 tmfmod 都要做。
+            FireDelayManager.cancelForeign(gunId);
 
             boolean isTmfMod = GunPackCompatManager.isTmfModMode(gunId);
             if (!isTmfMod) {
@@ -95,12 +99,27 @@ public abstract class MuzzleFlashRenderMixin {
                 // 忽略
             }
 
+            MuzzleFlashManager mgr = MuzzleFlashManager.get();
+            if (mgr == null) return;
+
+            // 获取当前枪械类型（用于枪型缩放）
+            String gunType = null;
+            try {
+                ClientGunIndex index = TimelessAPI.getClientGunIndex(gunId).orElse(null);
+                if (index != null) {
+                    gunType = index.getType();
+                }
+            } catch (Exception e) {
+                // 忽略
+            }
+            mgr.setCurrentGunType(gunType);
+
             if (MuzzleFlashDebug.isEnabled()) {
                 mgr.debugSnapshot(gunId, gunType, isTmfMod);
             }
 
-            // 检查动画是否过期
-            mgr.tick();
+            // 检查动画是否过期、消费就绪的延迟任务、回收孤儿任务
+            mgr.tick(gunId);
 
             // 如果动画活跃，捕获枪口矩阵并延迟到枪模渲染完成后渲染
             if (mgr.isActive()) {

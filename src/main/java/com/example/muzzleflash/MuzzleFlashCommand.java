@@ -19,10 +19,10 @@ public class MuzzleFlashCommand {
             Commands.literal("muzzleflash")
                 .then(Commands.literal("reload")
                     .executes(ctx -> {
-                        GunPackCompatManager.scan();
-                        FireDelayManager.clearAll();
+                        // 与 F3+T / /reload 走同一入口：贴图重扫+注册、配置扫描、动画/延迟重置
+                        MuzzleFlashContent.reload();
                         ctx.getSource().sendSystemMessage(Component.literal(
-                            "\u00a7a[MuzzleFlash] \u00a7f配置已重新扫描"));
+                            "\u00a7a[MuzzleFlash] \u00a7f贴图与配置已重新加载"));
                         return 1;
                     }))
                 .then(Commands.literal("debug")

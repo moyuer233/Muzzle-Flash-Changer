@@ -31,6 +31,8 @@ public class MuzzleFlashClientEvents {
         IGun iGun = IGun.getIGunOrNull(gunItem);
         if (iGun == null) return;
         ResourceLocation gunId = iGun.getGunId(gunItem);
+        // 非 tmfmod 枪由原版 TACZ 渲染，不进本模组状态机（避免白建动画/延迟任务）
+        if (!GunPackCompatManager.isTmfModMode(gunId)) return;
         MuzzleFlashManager mgr = MuzzleFlashManager.get();
         if (mgr != null) {
             mgr.triggerAnimation(gunId);

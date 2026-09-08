@@ -28,11 +28,11 @@
 | `defaultmuzzleflashframes` | 默认帧列表，资源路径数组（按顺序播放） |
 | `muzzleframes` | 单枪专用帧列表（配置在 `guns` 下时优先使用） |
 | `FrameDurationMs` | 动画总显示时长（毫秒） |
-| `scale` | 缩放倍率 |
+| `scale` | 缩放倍率（最终渲染缩放 = scale × 枪型系数，见下文） |
 | `autoScale` | 按贴图有效内容自动缩放 |
-| `flashDelayMs` | 枪焰延迟启动（毫秒） |
+| `flashDelayMs` | 枪焰延迟启动（毫秒），**仅 `guns` 下生效**（`defaultAnimation` 中的该字段无效） |
 | `offsetX` / `offsetY` / `offsetZ` | 枪焰位置偏移（世界单位，1.0=1米；X 右、Y 上、Z 前） |
-| `disableFlash` | `true` 时不渲染枪焰 |
+| `disableFlash` | `true` 时不渲染枪焰（含回退帧）；放在 `defaultAnimation` 可整包禁用 |
 
 ### 完整示例
 
@@ -76,6 +76,7 @@
 
 - `defaultAnimation`：所有未单独配置的枪使用
 - `guns.<gunId>`：覆盖指定枪（`<命名空间>:<枪id>`，如 `tacz:ak47`、`re:rsh12`）
+- **枪型缩放系数**：最终渲染缩放 = `scale` × 枪型系数。枪型由 TACZ 枪数据的 `type` 决定：pistol=0.7、smg=0.85、rifle=1.0、shotgun=1.3、sniper=1.4、grenade=1.5、special=1.1、melee=0.5（未知枪型按 1.0）。想让某把枪的最终大小完全等于 `scale`，可把 `scale` 设为 `期望值 ÷ 枪型系数`。
 
 ### 帧资源路径
 
