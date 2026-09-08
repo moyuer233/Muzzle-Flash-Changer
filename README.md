@@ -90,6 +90,12 @@ TACZ 原版枪口特效是挂在枪模 `muzzle_flash` 骨骼上的一个 16px �
 
 想让某把枪恢复旧的"自定义大小"渲染，把该枪（或 `defaultAnimation`）的 `autoScaleFromDisplay` 设为 `false` 即可。
 
+### 多枪口（双持/多管枪械）支持
+
+TACZ 原版只会在名为 `muzzle_flash` 的**单个**骨骼上渲染枪口特效。双持/多管枪械的模型常在每支枪口都放一个挂点（`muzzle_flash2`、`muzzle_flash3`…），原版只闪主枪口那一支。
+
+本模组会自动把这类**额外枪口挂点**也纳入渲染：开火时每一支枪口都按各自位置同步闪出同一个火焰动画（闪电鹰 X 双持、RSH12 双持、wingshooter 双持模式等开箱即用，无需任何配置）。普通单枪口模型不受影响。
+
 ### 帧资源路径
 
 贴图位于 `assets/<namespace>/textures/muzzle/<名称>/frame_*.png`，配置中的路径格式为：

@@ -173,6 +173,13 @@ public class MuzzleFlashManager {
         return current != null;
     }
 
+    /**
+     * 当前播放的动画是否属于指定枪（多枪口渲染时用于确认"这把模型正在放这把枪的火"）。
+     */
+    public boolean isActiveForGun(ResourceLocation gunId) {
+        return current != null && gunId != null && gunId.equals(currentGunId);
+    }
+
     /** 调试快照计数器 */
     private int debugSnapshotCounter = 0;
 
