@@ -1,7 +1,7 @@
-package com.example.muzzleflash.mixin;
+package io.github.moyuer233.muzzleflashchanger.mixin;
 
-import com.example.muzzleflash.ExtraMuzzleFlashRender;
-import com.example.muzzleflash.MuzzleFlashMod;
+import io.github.moyuer233.muzzleflashchanger.ExtraMuzzleFlashRender;
+import io.github.moyuer233.muzzleflashchanger.MuzzleFlashMod;
 import com.tacz.guns.client.model.BedrockGunModel;
 import com.tacz.guns.client.resource.pojo.model.BedrockModelPOJO;
 import com.tacz.guns.client.resource.pojo.model.BedrockVersion;

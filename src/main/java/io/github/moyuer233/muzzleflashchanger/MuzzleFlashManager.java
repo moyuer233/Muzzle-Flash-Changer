@@ -1,4 +1,4 @@
-package com.example.muzzleflash;
+package io.github.moyuer233.muzzleflashchanger;
 
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;

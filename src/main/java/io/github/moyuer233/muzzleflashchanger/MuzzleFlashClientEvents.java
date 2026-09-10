@@ -1,4 +1,4 @@
-package com.example.muzzleflash;
+package io.github.moyuer233.muzzleflashchanger;
 
 import com.tacz.guns.api.event.common.GunFireEvent;
 import com.tacz.guns.api.item.IGun;

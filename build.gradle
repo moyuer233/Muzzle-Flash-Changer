@@ -16,7 +16,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'org.spongepowered.mixin'
 
 version = '1.0.0'
-group = 'com.example.muzzleflash'
+group = 'io.github.moyuer233.muzzleflashchanger'
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 minecraft {

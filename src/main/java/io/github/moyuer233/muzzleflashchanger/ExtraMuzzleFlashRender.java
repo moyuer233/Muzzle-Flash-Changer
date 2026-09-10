@@ -1,4 +1,4 @@
-package com.example.muzzleflash;
+package io.github.moyuer233.muzzleflashchanger;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -17,7 +17,7 @@ import org.joml.Matrix4f;
  * <p>
  * TACZ 只把枪口特效挂在名为 {@code muzzle_flash} 的单个骨骼上；双持/多管模型
  * （骨骼如 muzzle_flash2、muzzle_flash3…）的其它枪口原版不会出火。
- * 本渲染器由 {@link com.example.muzzleflash.mixin.BedrockGunModelMixin} 注册到这些额外骨骼：
+ * 本渲染器由 {@link io.github.moyuer233.muzzleflashchanger.mixin.BedrockGunModelMixin} 注册到这些额外骨骼：
  * 本地玩家第一人称开火时（与原版特效同一 isSelf 上下文），在该骨骼处同步渲染
  * 同一个开火动画的 quad（位置 = 该骨骼矩阵），实现多支枪口同时出火。
  */

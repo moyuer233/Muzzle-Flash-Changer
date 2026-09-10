@@ -1,4 +1,4 @@
-package com.example.muzzleflash;
+package io.github.moyuer233.muzzleflashchanger;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RegisterClientReloadListenersEvent;

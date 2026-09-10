@@ -1,10 +1,10 @@
-package com.example.muzzleflash.mixin;
+package io.github.moyuer233.muzzleflashchanger.mixin;
 
-import com.example.muzzleflash.FireDelayManager;
-import com.example.muzzleflash.GunPackCompatManager;
-import com.example.muzzleflash.MuzzleFlashDebug;
-import com.example.muzzleflash.MuzzleFlashManager;
-import com.example.muzzleflash.MuzzleFlashMod;
+import io.github.moyuer233.muzzleflashchanger.FireDelayManager;
+import io.github.moyuer233.muzzleflashchanger.GunPackCompatManager;
+import io.github.moyuer233.muzzleflashchanger.MuzzleFlashDebug;
+import io.github.moyuer233.muzzleflashchanger.MuzzleFlashManager;
+import io.github.moyuer233.muzzleflashchanger.MuzzleFlashMod;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.tacz.guns.api.TimelessAPI;
