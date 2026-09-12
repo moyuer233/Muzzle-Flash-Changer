@@ -1,17 +1,19 @@
 <div align="center">
 
-![license](https://img.shields.io/github/license/moyuer233/Muzzle-Flash-Changer)
-![release](https://img.shields.io/github/v/release/moyuer233/Muzzle-Flash-Changer)
-![downloads](https://img.shields.io/github/downloads/moyuer233/Muzzle-Flash-Changer/total)
-![Minecraft](https://img.shields.io/badge/Minecraft-1.20.1-62B47A)
-![Forge](https://img.shields.io/badge/Forge-47.x-orange)
-![Java](https://img.shields.io/badge/Java-17-ED8B00)
+# Muzzle Flash Changer
+
+_✨ 自定义 TACZ 枪口火焰：多帧动画取代原版单张贴图，支持按枪配置 ✨_
 
 </div>
 
-# Muzzle Flash Changer
-
-自定义 TACZ 枪口火焰的模组：用多帧动画取代原版单张贴图，支持按枪配置。
+<p align="center">
+  <img src="https://img.shields.io/github/license/moyuer233/Muzzle-Flash-Changer" alt="license">
+  <img src="https://img.shields.io/github/v/release/moyuer233/Muzzle-Flash-Changer" alt="release">
+  <img src="https://img.shields.io/github/downloads/moyuer233/Muzzle-Flash-Changer/total" alt="downloads">
+  <img src="https://img.shields.io/badge/Minecraft-1.20.1-62B47A" alt="Minecraft">
+  <img src="https://img.shields.io/badge/Forge-47.x-orange" alt="Forge">
+  <img src="https://img.shields.io/badge/Java-17-ED8B00" alt="Java">
+</p>
 
 ## 功能
 
