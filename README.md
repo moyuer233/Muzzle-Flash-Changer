@@ -1,3 +1,15 @@
+<div align="center">
+
+![license](https://img.shields.io/github/license/moyuer233/Muzzle-Flash-Changer)
+![release](https://img.shields.io/github/v/release/moyuer233/Muzzle-Flash-Changer)
+![downloads](https://img.shields.io/github/downloads/moyuer233/Muzzle-Flash-Changer/total)
+
+![Minecraft](https://img.shields.io/badge/Minecraft-1.20.1-62B47A)
+![Forge](https://img.shields.io/badge/Forge-47.x-orange)
+![Java](https://img.shields.io/badge/Java-17-ED8B00)
+
+</div>
+
 # Muzzle Flash Changer
 
 自定义 TACZ 枪口火焰的模组：用多帧动画取代原版单张贴图，支持按枪配置。
