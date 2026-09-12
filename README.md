@@ -3,7 +3,6 @@
 ![license](https://img.shields.io/github/license/moyuer233/Muzzle-Flash-Changer)
 ![release](https://img.shields.io/github/v/release/moyuer233/Muzzle-Flash-Changer)
 ![downloads](https://img.shields.io/github/downloads/moyuer233/Muzzle-Flash-Changer/total)
-
 ![Minecraft](https://img.shields.io/badge/Minecraft-1.20.1-62B47A)
 ![Forge](https://img.shields.io/badge/Forge-47.x-orange)
 ![Java](https://img.shields.io/badge/Java-17-ED8B00)
