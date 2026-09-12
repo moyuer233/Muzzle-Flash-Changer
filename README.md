@@ -10,6 +10,9 @@ _✨ 自定义 TACZ 枪口火焰：多帧动画取代原版单张贴图，支持
   <img src="https://img.shields.io/github/license/moyuer233/Muzzle-Flash-Changer" alt="license">
   <img src="https://img.shields.io/github/v/release/moyuer233/Muzzle-Flash-Changer" alt="release">
   <img src="https://img.shields.io/github/downloads/moyuer233/Muzzle-Flash-Changer/total" alt="downloads">
+  <img src="https://img.shields.io/github/commit-activity/m/moyuer233/Muzzle-Flash-Changer" alt="commit activity">
+  <img src="https://img.shields.io/github/last-commit/moyuer233/Muzzle-Flash-Changer" alt="last commit">
+  <br>
   <img src="https://img.shields.io/badge/Minecraft-1.20.1-62B47A" alt="Minecraft">
   <img src="https://img.shields.io/badge/Forge-47.x-orange" alt="Forge">
   <img src="https://img.shields.io/badge/Java-17-ED8B00" alt="Java">
