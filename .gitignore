@@ -29,3 +29,6 @@ Desktop.ini
 # ===== 本地配置（含个人路径）=====
 gradle.properties.local
 local.properties
+
+# ===== 内部调试笔记（不上仓库）=====
+debug-*.md
