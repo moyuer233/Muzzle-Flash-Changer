@@ -1,10 +1,6 @@
-<div align="center">
-
 # Muzzle Flash Changer
 
 _✨ 自定义 TACZ 枪口火焰：多帧动画取代原版单张贴图，支持按枪配置 ✨_
-
-</div>
 
 <p align="center">
   <img src="https://img.shields.io/github/license/moyuer233/Muzzle-Flash-Changer" alt="license">
