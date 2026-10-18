@@ -2,9 +2,16 @@
 
 _✨ 自定义 TACZ 枪口火焰：多帧动画取代原版单张贴图，支持按枪配置 ✨_
 
-![license](https://img.shields.io/github/license/moyuer233/Muzzle-Flash-Changer) ![release](https://img.shields.io/github/v/release/moyuer233/Muzzle-Flash-Changer) ![downloads](https://img.shields.io/github/downloads/moyuer233/Muzzle-Flash-Changer/total)
-![commit activity](https://img.shields.io/github/commit-activity/m/moyuer233/Muzzle-Flash-Changer) ![last commit](https://img.shields.io/github/last-commit/moyuer233/Muzzle-Flash-Changer)
-![Minecraft](https://img.shields.io/badge/Minecraft-1.20.1-62B47A) ![Forge](https://img.shields.io/badge/Forge-47.x-orange) ![Java](https://img.shields.io/badge/Java-17-ED8B00)
+<p align="center">
+  <a href="https://github.com/moyuer233/Muzzle-Flash-Changer/blob/master/LICENSE"><img alt="license" src="https://img.shields.io/github/license/moyuer233/Muzzle-Flash-Changer?style=flat-square&labelColor=161b22&color=3DA639&logo=github&logoColor=white"/></a>
+  <a href="https://github.com/moyuer233/Muzzle-Flash-Changer/releases"><img alt="release" src="https://img.shields.io/github/v/release/moyuer233/Muzzle-Flash-Changer?style=flat-square&labelColor=161b22&color=2088FF&logo=github&logoColor=white"/></a>
+  <a href="https://github.com/moyuer233/Muzzle-Flash-Changer/releases"><img alt="downloads" src="https://img.shields.io/github/downloads/moyuer233/Muzzle-Flash-Changer/total?style=flat-square&labelColor=161b22&color=2088FF&logo=github&logoColor=white"/></a>
+  <a href="https://github.com/moyuer233/Muzzle-Flash-Changer/commits/master"><img alt="commit activity" src="https://img.shields.io/github/commit-activity/m/moyuer233/Muzzle-Flash-Changer?style=flat-square&labelColor=161b22&color=2088FF&logo=github&logoColor=white"/></a>
+  <a href="https://github.com/moyuer233/Muzzle-Flash-Changer/commits/master"><img alt="last commit" src="https://img.shields.io/github/last-commit/moyuer233/Muzzle-Flash-Changer?style=flat-square&labelColor=161b22&color=2088FF&logo=github&logoColor=white"/></a>
+  <a href="https://www.minecraft.net"><img alt="Minecraft" src="https://img.shields.io/badge/Minecraft-1.20.1-62B47A?style=flat-square&labelColor=161b22&color=62B47A&logo=minecraft&logoColor=white"/></a>
+  <a href="https://files.minecraftforge.net"><img alt="Forge" src="https://img.shields.io/badge/Forge-47.x-orange?style=flat-square&labelColor=161b22&color=E04E14"/></a>
+  <a href="https://adoptium.net"><img alt="Java" src="https://img.shields.io/badge/Java-17-ED8B00?style=flat-square&labelColor=161b22&color=ED8B00&logo=openjdk&logoColor=white"/></a>
+</p>
 
 ## 功能
 
